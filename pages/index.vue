@@ -1,28 +1,36 @@
 <template>
   <div>
     <h1>Events</h1>
-    <ul v-for="event in events" :key="event.id">
-      <li>
-        <nuxt-link
-          :to="{ name: 'category', params: { category: event.title } }"
-          >{{ event.title }}</nuxt-link
-        >
-      </li>
-    </ul>
+    <EventCard
+      v-for="(event, index) in events"
+      :key="event.id"
+      :event="event"
+      :data-index="index"
+    />
   </div>
 </template>
 
 <script>
+import EventCard from '@/components/EventCard.vue'
+
 export default {
-  data() {
-    return {
-      events: [
-        { id: 1, title: 'hot' },
-        { id: 2, title: 'item' },
-        { id: 3, title: 'culture' },
-        { id: 4, title: 'travel' },
-      ],
-    }
+  components: {
+    EventCard,
+  },
+  asyncData({ $axios, error }) {
+    return $axios
+      .get('http://localhost:3000/events')
+      .then((response) => {
+        return {
+          events: response.data,
+        }
+      })
+      .catch((e) => {
+        error({
+          statusCode: 503,
+          message: 'Unable to fetch events at this time, please try again',
+        })
+      })
   },
   head() {
     return {
