@@ -39,4 +39,9 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
+
+  /*
+   ** Customize the progress-bar color
+   */
+  loading: { color: '#39b982' },
 }
